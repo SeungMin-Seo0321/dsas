@@ -104,7 +104,7 @@
 
             // Pollinations 생성 API 호출 (선택한 모델, 고해상도, 프롬프트 보강)
             const randomSeed = Math.floor(Math.random() * 99999);
-            currentImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(translatedPrompt)}?seed=${randomSeed}&width=1024&height=1024&nologo=true&model=${model}&enhance=true`;
+            currentImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(translatedPrompt)}?seed=${randomSeed}&width=832&height=1216&nologo=true&model=${model}&enhance=false`;
 
             resultImg.src = currentImageUrl;
 
