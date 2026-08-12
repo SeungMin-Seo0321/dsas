@@ -9,7 +9,7 @@
         .container { background: #fff; padding: 30px; border-radius: 8px; width: 100%; max-width: 500px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         h2 { margin-top: 0; font-size: 20px; }
         label { font-size: 14px; font-weight: bold; margin-bottom: 5px; display: block; }
-        input[type="text"], input[type="file"] { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input[type="text"], input[type="file"], select { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         button { width: 100%; background: #222; color: #fff; border: none; padding: 12px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-bottom: 10px; }
         button:hover { background: #444; }
         button:disabled { background: #999; cursor: not-allowed; }
@@ -18,20 +18,30 @@
         #downloadBtn { display: none; background: #0066cc; }
         #downloadBtn:hover { background: #005bb5; }
         .status { margin: 10px 0; font-size: 14px; color: #555; }
+        .hint { font-size: 12px; color: #888; margin-top: -10px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>이미지 생성해줄게 ㅇㅇ</h2>
-    
-    <label>이미지 업로드. 필수 ㄴㄴ</label>
+
+    <label>이미지 업로드. 필수는아니다 ㅇㅇ</label>
     <input type="file" id="imageInput" accept="image/*">
     <img id="preview" alt="업로드 미리보기">
 
     <label>프롬프트 입력해라</label>
     <input type="text" id="promptInput" placeholder="예: 우주복을 입은 귀여운 준수">
-    
+
+    <label>모델 선택</label>
+    <select id="modelSelect">
+        <option value="flux" selected>Flux (무료, 무제한)</option>
+        <option value="turbo">Turbo (빠른 생성)</option>
+        <option value="kontext">Kontext (정교한 표현)</option>
+        <option value="gptimage">GPT Image (높은 프롬프트 이해도)</option>
+    </select>
+    <div class="hint">Flux 외 모델은 소량의 무료 크레딧(Pollen) 소진 후 유료로 전환될 수 있습니다.</div>
+
     <button id="generateBtn" onclick="generateImage()">생성 ㄱ?</button>
     <div id="status" class="status"></div>
 
@@ -59,6 +69,7 @@
     // 2. 번역 및 이미지 생성
     async function generateImage() {
         const prompt = document.getElementById('promptInput').value;
+        const model = document.getElementById('modelSelect').value;
         const btn = document.getElementById('generateBtn');
         const status = document.getElementById('status');
         const resultImg = document.getElementById('resultImage');
@@ -84,15 +95,15 @@
 
             // 제미나이가 번역한 영어 프롬프트
             const translatedPrompt = data.translatedPrompt;
-            
-            // Pollinations 무료 생성 API 호출
+
+            // Pollinations 생성 API 호출 (선택한 모델, 고해상도, 프롬프트 보강)
             const randomSeed = Math.floor(Math.random() * 99999);
-            currentImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(translatedPrompt)}?seed=${randomSeed}&width=512&height=512&nologo=true`;
+            currentImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(translatedPrompt)}?seed=${randomSeed}&width=1024&height=1024&nologo=true&model=${model}&enhance=true`;
 
             resultImg.src = currentImageUrl;
-            
+
             resultImg.onload = function() {
-                status.innerText = `완료! (번역: ${translatedPrompt})`;
+                status.innerText = `완료! (모델: ${model} / 번역: ${translatedPrompt})`;
                 resultImg.style.display = "block";
                 downloadBtn.style.display = "block";
                 btn.disabled = false;
@@ -116,7 +127,7 @@
             const response = await fetch(currentImageUrl);
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
-            
+
             const link = document.createElement('a');
             link.href = url;
             link.download = `generated_image_${Date.now()}.jpg`;
