@@ -35,12 +35,18 @@
 
     <label>모델 선택</label>
     <select id="modelSelect">
-        <option value="flux" selected>Flux (무료, 무제한)</option>
-        <option value="turbo">Turbo (빠른 생성)</option>
-        <option value="kontext">Kontext (정교한 표현)</option>
-        <option value="gptimage">GPT Image (높은 프롬프트 이해도)</option>
+        <option value="flux" selected>Flux (무료)</option>
+        <option value="zimage">Zimage (무료)</option>
+        <option value="turbo">Turbo (무료 크레딧으로 사용)</option>
+        <option value="kontext">Kontext (무료 크레딧으로 사용)</option>
+        <option value="gptimage">GPT Image (무료 크레딧으로 사용)</option>
+        <option value="nanobanana">Nanobanana (무료 크레딧으로 사용)</option>
+        <option value="nanobanana-pro">Nanobanana Pro (무료 크레딧으로 사용)</option>
+        <option value="seedream5">Seedream 5 (무료 크레딧으로 사용)</option>
+        <option value="ideogram-v4-balanced">Ideogram v4 Balanced (무료 크레딧으로 사용)</option>
+        <option value="qwen-image">Qwen Image (무료 크레딧으로 사용)</option>
     </select>
-    <div class="hint">Flux 외 모델은 소량의 무료 크레딧(Pollen) 소진 후 유료로 전환될 수 있습니다.</div>
+    <div class="hint">"무료 크레딧으로 사용" 모델은 주간 무료 Pollen 크레딧 소진 후 유료로 전환될 수 있습니다.</div>
 
     <button id="generateBtn" onclick="generateImage()">생성 ㄱ?</button>
     <div id="status" class="status"></div>
