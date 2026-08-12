@@ -31,12 +31,13 @@ export default async function handler(req, res) {
             throw new Error(geminiData.error?.message || "Gemini 번역 실패");
         }
 
+        // 번역된 텍스트 추출
         const translatedPrompt = geminiData.candidates[0].content.parts[0].text.trim();
 
         res.status(200).json({ translatedPrompt });
 
     } catch (error) {
-        // 번역 자체가 실패해도 원본 prompt로 폴백
+        // 번역 자체가 실패해도 원본 prompt로 폴백해서 흐름이 끊기지 않게 함
         res.status(200).json({ translatedPrompt: prompt, warning: error.message });
     }
 }
